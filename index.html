@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Hunter Pro v2 — Your Fresher Job Search Toolkit</title>
+    <meta name="description" content="Job Hunter Pro v2 — A free, comprehensive job search toolkit for freshers. Search jobs, track applications, find LinkedIn opportunities, manage HR contacts, and handle resumes." />
+    <script>
+      // Prevent FOUC — apply dark mode before render
+      (function() {
+        var theme = localStorage.getItem('jobhunter_theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
