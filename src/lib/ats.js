@@ -15,14 +15,18 @@ export function calcATSScore(jobSkills = [], jobTitle = '') {
 
     let roleBonus = 0;
     const title = jobTitle.toLowerCase();
-    if (ROLE_GROUPS["Product Track"].keywords.some(k => title.includes(k))) roleBonus = 15;
-    else if (ROLE_GROUPS["Project Track"].keywords.some(k => title.includes(k))) roleBonus = 14;
-    else if (ROLE_GROUPS["Business & Strategy Track"].keywords.some(k => title.includes(k))) roleBonus = 13;
-    else if (ROLE_GROUPS["Data & Reporting Track"].keywords.some(k => title.includes(k))) roleBonus = 12;
-    else if (ROLE_GROUPS["Research & UX Track"].keywords.some(k => title.includes(k))) roleBonus = 11;
-    else if (ROLE_GROUPS["AI & Ops Track"].keywords.some(k => title.includes(k))) roleBonus = 13;
-    else if (ROLE_GROUPS["Content & Docs Track"].keywords.some(k => title.includes(k))) roleBonus = 10;
-    else if (ROLE_GROUPS["Customer Success Track"].keywords.some(k => title.includes(k))) roleBonus = 8;
+
+    // Safety check: ensure ROLE_GROUPS and the specific group exist
+    const getKeywords = (groupName) => ROLE_GROUPS[groupName]?.keywords || [];
+
+    if (getKeywords("Product Track").some(k => title.includes(k))) roleBonus = 15;
+    else if (getKeywords("Project Track").some(k => title.includes(k))) roleBonus = 14;
+    else if (getKeywords("Business & Strategy Track").some(k => title.includes(k))) roleBonus = 13;
+    else if (getKeywords("Data Track").some(k => title.includes(k))) roleBonus = 12;
+    else if (getKeywords("Research & UX Track").some(k => title.includes(k))) roleBonus = 11;
+    else if (getKeywords("AI & Ops Track").some(k => title.includes(k))) roleBonus = 13;
+    else if (getKeywords("Content & Docs Track").some(k => title.includes(k))) roleBonus = 10;
+    else if (getKeywords("Customer Success Track").some(k => title.includes(k))) roleBonus = 8;
 
     const rawScore = Math.min(100, skillScore + roleBonus);
     return { rawScore, exactMatches, partialMatches, missingSkills };

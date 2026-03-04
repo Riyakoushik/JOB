@@ -21,26 +21,144 @@ export const USER_PROFILE = {
         "Selected from 10,000+ global applicants for McKinsey Forward", "Delivered 15+ executive presentations",
         "Built RIYA AI – emotionally intelligent AI companion", "Eliminated 80% manual research time via AI automation"
     ],
-    targetRoles: ["APM", "Associate Product Manager", "Product Analyst", "Project Coordinator", "Product Intern", "PM Intern", "Business Analyst", "Growth Analyst", "Research Analyst"],
-    blockedKeywords: ["BPO", "Sales", "Telecaller", "Customer Support", "Insurance", "Field Sales", "Voice Process", "Marketing Executive", "Collection", "Outbound"]
+    targetRoles: [
+        "APM", "Associate Product Manager", "Product Analyst",
+        "Product Operations Analyst", "Product Research Intern",
+        "Product Strategy Intern", "AI Product Intern",
+        "Project Coordinator", "Program Coordinator",
+        "Delivery Coordinator", "Agile Coordinator",
+        "Operations Coordinator", "Project Analyst",
+        "Business Analyst", "Strategy Analyst",
+        "Market Research Analyst", "Business Operations Analyst",
+        "Competitive Intelligence Analyst", "Management Trainee",
+        "Reporting Analyst", "BI Analyst", "Insights Analyst",
+        "Dashboard Analyst", "KPI Analyst", "Data Operations Analyst",
+        "UX Researcher", "User Researcher", "Market Analyst",
+        "Research Analyst", "Research Intern",
+        "AI Research Analyst", "Prompt Analyst", "AI Strategy Intern",
+        "No-Code Automation Analyst", "AI Tools Specialist",
+        "Customer Success Analyst", "Client Success Intern",
+        "Onboarding Specialist", "Technical Writer",
+        "Knowledge Base Manager", "UX Writer"
+    ],
+    blockedKeywords: [
+        "BPO", "Sales", "Telecaller", "Customer Support",
+        "Insurance", "Field Sales", "Voice Process",
+        "Marketing Executive", "Collection", "Outbound",
+        "Software Engineer", "Developer", "Designer",
+        "Telemarketing", "Telesales", "Coding", "Programming"
+    ]
 };
 
 export const ROLE_GROUPS = {
-    "Product Track": { color: "blue", icon: "📦", keywords: ["associate product manager", "apm", "product intern", "product analyst", "product owner", "product operations", "product strategy intern", "product research", "product specialist", "junior product manager", "product coordinator", "ai product"] },
-    "Project Track": { color: "purple", icon: "🏗️", keywords: ["project coordinator", "project manager", "program coordinator", "program manager", "scrum master intern", "delivery coordinator", "project analyst", "agile coordinator", "sprint coordinator", "it coordinator", "operations coordinator", "project intern"] },
-    "Business & Strategy Track": { color: "indigo", icon: "📊", keywords: ["business analyst", "strategy analyst", "management consultant", "market research analyst", "business operations analyst", "competitive intelligence analyst", "strategy intern", "management trainee", "business research analyst", "corporate strategy", "business development analyst"] },
-    "Data & Reporting Track": { color: "green", icon: "📈", keywords: ["data analyst", "reporting analyst", "bi analyst", "analytics intern", "data research analyst", "insights analyst", "dashboard analyst", "metrics analyst", "kpi analyst", "google analytics", "excel analyst", "data operations"] },
-    "Research & UX Track": { color: "pink", icon: "🔬", keywords: ["ux researcher", "user researcher", "usability tester", "growth analyst", "growth research", "market analyst", "consumer research analyst", "design researcher", "product design researcher", "research analyst", "research intern"] },
-    "Content & Docs Track": { color: "yellow", icon: "✍️", keywords: ["technical writer", "documentation specialist", "content strategist", "knowledge base manager", "product writer", "ux writer", "content analyst", "documentation analyst", "learning content", "technical content writer", "product documentation"] },
-    "AI & Ops Track": { color: "orange", icon: "🤖", keywords: ["ai product researcher", "ai operations analyst", "prompt analyst", "ai research analyst", "ai strategy intern", "ml operations analyst", "ai product intern", "no-code analyst", "automation analyst", "ai coordinator", "llm researcher", "ai tools specialist"] },
-    "Customer Success Track": { color: "teal", icon: "🤝", keywords: ["customer success manager", "customer success analyst", "client success intern", "account manager intern", "customer operations analyst", "onboarding specialist", "product success analyst", "implementation analyst"] }
+    "Product Track": {
+        color: "blue", icon: "📦",
+        keywords: [
+            "associate product manager", "apm", "product intern",
+            "product analyst", "product operations", "product research",
+            "product strategy intern", "product specialist",
+            "junior product manager", "product coordinator",
+            "ai product", "product operations analyst"
+        ]
+    },
+    "Project Track": {
+        color: "purple", icon: "🏗️",
+        keywords: [
+            "project coordinator", "project analyst", "project intern",
+            "program coordinator", "delivery coordinator",
+            "agile coordinator", "operations coordinator",
+            "it coordinator", "sprint coordinator"
+        ]
+    },
+    "Business & Strategy Track": {
+        color: "indigo", icon: "📊",
+        keywords: [
+            "business analyst", "strategy analyst", "strategy intern",
+            "market research analyst", "business operations analyst",
+            "competitive intelligence analyst", "management trainee",
+            "business research analyst", "corporate strategy",
+            "management consultant intern"
+        ]
+    },
+    "Data Track": {
+        color: "green", icon: "📈",
+        keywords: [
+            "reporting analyst", "bi analyst", "insights analyst",
+            "dashboard analyst", "kpi analyst", "data operations",
+            "data operations analyst", "analytics intern",
+            "data research analyst", "metrics analyst"
+        ]
+    },
+    "Research & UX Track": {
+        color: "pink", icon: "🔬",
+        keywords: [
+            "ux researcher", "user researcher", "market analyst",
+            "consumer research analyst", "research analyst",
+            "research intern", "usability researcher",
+            "product research analyst", "growth analyst"
+        ]
+    },
+    "AI & Ops Track": {
+        color: "orange", icon: "🤖",
+        keywords: [
+            "ai research analyst", "prompt analyst", "ai strategy intern",
+            "no-code automation analyst", "ai tools specialist",
+            "ai operations analyst", "ai product researcher",
+            "llm researcher", "automation analyst", "ai coordinator"
+        ]
+    },
+    "Customer Success Track": {
+        color: "teal", icon: "🤝",
+        keywords: [
+            "customer success analyst", "client success intern",
+            "onboarding specialist", "product success analyst",
+            "customer operations analyst", "implementation analyst"
+        ]
+    },
+    "Content & Docs Track": {
+        color: "yellow", icon: "✍️",
+        keywords: [
+            "technical writer", "product documentation",
+            "knowledge base manager", "ux writer",
+            "documentation specialist", "product writer",
+            "content analyst", "documentation analyst"
+        ]
+    }
 };
 
 export const BLOCKED_KEYWORDS = [
-    "bpo", "telecaller", "voice process", "inbound calls", "outbound calls", "call center", "customer care executive", "helpdesk executive", "technical support executive", "chat support", "email support agent",
-    "sales executive", "sales representative", "field sales", "field executive", "inside sales", "cold calling", "lead generation executive", "business development executive", "bd executive", "sales associate",
-    "insurance advisor", "insurance agent", "loan officer", "collection agent", "recovery agent", "financial advisor",
-    "marketing executive", "social media executive", "seo executive", "digital marketing executive", "content writer"
+    // Sales & Marketing
+    "sales executive", "sales representative", "field sales",
+    "field executive", "inside sales", "cold calling",
+    "lead generation executive", "business development executive",
+    "bd executive", "sales associate", "marketing executive",
+    "social media executive", "seo executive",
+    "digital marketing executive", "content writer",
+
+    // Telecaller & BPO
+    "telecaller", "bpo", "voice process", "inbound calls",
+    "outbound calls", "call center", "customer care executive",
+    "helpdesk executive", "technical support executive",
+    "chat support", "email support agent", "telesales",
+    "telemarketing",
+
+    // Finance & Insurance
+    "insurance advisor", "insurance agent", "loan officer",
+    "collection agent", "recovery agent", "financial advisor",
+
+    // Coding & Development
+    "software engineer", "software developer", "frontend developer",
+    "backend developer", "full stack developer", "web developer",
+    "android developer", "ios developer", "react developer",
+    "node developer", "python developer", "java developer",
+    "devops engineer", "data engineer", "ml engineer",
+    "deep learning", "blockchain developer",
+
+    // Design
+    "ui designer", "ux designer", "graphic designer",
+    "visual designer", "motion designer", "product designer",
+    "web designer", "logo designer", "figma designer",
+    "ui/ux designer"
 ];
 
 export const MOCK_JOBS = [

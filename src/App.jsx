@@ -2,16 +2,18 @@ import * as React from 'react';
 import {
   Briefcase, Linkedin, Users, FileText, ClipboardList, User, Bell, Settings, Search, Rocket, Database
 } from 'lucide-react';
-import { Toast, Button, Avatar } from './components/ui';
+import { Toast } from '@/components/ui/custom';
+import { Button } from '@/components/ui/button';
+import { Avatar } from '@/components/ui/avatar';
 import { useLocalStorage } from './hooks/useHooks';
 import { USER_PROFILE } from './data/constants';
-import JobSearchTab from './components/JobSearchTab';
-import LinkedInFinderTab from './components/LinkedInFinderTab';
-import HRContactsTab from './components/HRContactsTab';
-import ResumeTab from './components/ResumeTab';
-import ApplicationsTab from './components/ApplicationsTab';
-import MyProfileTab from './components/MyProfileTab';
-import AdminPanelTab from './components/AdminPanelTab';
+import JobSearchTab from './components/tabs/JobSearchTab';
+import LinkedInFinderTab from './components/tabs/LinkedInFinderTab';
+import HRContactsTab from './components/tabs/HRContactsTab';
+import ResumeTab from './components/tabs/ResumeTab';
+import ApplicationsTab from './components/tabs/ApplicationsTab';
+import MyProfileTab from './components/tabs/MyProfileTab';
+import AdminPanelTab from './components/tabs/AdminPanelTab';
 
 export default function JobHunterPro() {
   const [activeTab, setActiveTab] = React.useState('jobs');
