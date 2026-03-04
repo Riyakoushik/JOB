@@ -1,23 +1,23 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Hunter Pro v2 — Your Fresher Job Search Toolkit</title>
-    <meta name="description" content="Job Hunter Pro v2 — A free, comprehensive job search toolkit for freshers. Search jobs, track applications, find LinkedIn opportunities, manage HR contacts, and handle resumes." />
-    <script>
-      // Prevent FOUC — apply dark mode before render
-      (function() {
-        var theme = localStorage.getItem('jobhunter_theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
-  </head>
-  <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white min-h-screen">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JobHunter Pro — Premium Job Search Platform</title>
+  <meta name="description"
+    content="JobHunter Pro — A premium, enterprise-grade job search platform. Discover jobs, track applications, find HR contacts, and land your dream role faster." />
+  <meta name="theme-color" content="#0A66C2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body class="bg-[#F8FAFC] dark:bg-[#0B0F1A] text-gray-900 dark:text-gray-100 min-h-screen antialiased">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
