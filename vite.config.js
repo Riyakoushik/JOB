@@ -15,10 +15,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api/jobs': {
-        target: 'https://arbeitnow.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/jobs/, '/api/job-board-api'),
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
       },
     },
   },

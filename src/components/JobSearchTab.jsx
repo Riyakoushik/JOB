@@ -7,14 +7,20 @@ import {
     Button, Card, CardHeader, CardTitle, CardDescription, CardContent,
     Badge, Input, MatchScoreCircle
 } from './ui';
-import { MOCK_JOBS, ROLE_GROUPS, BLOCKED_KEYWORDS } from '../data/constants';
+import { MOCK_JOBS, ROLE_GROUPS, BLOCKED_KEYWORDS, USER_PROFILE } from '../data/constants';
 import { calcATSScore, detectRoleGroup } from '../lib/ats';
 import { useDebounce } from '../hooks/useHooks';
 import { cn } from '../lib/utils';
 
 // ===== ATS ANALYSIS PANEL (SHADCN STYLE) =====
 function ATSPanel({ job, onClose }) {
-    const analysis = calcATSScore(job.skills, job.title);
+    // Use backend ATS calculation if available, fallback to client-side
+    const analysis = job.atsReport ? {
+        rawScore: job.atsScore,
+        exactMatches: job.atsReport.matchedSkills || [],
+        missingSkills: job.atsReport.missingSkills || [],
+        recommendations: job.atsReport.recommendations || []
+    } : calcATSScore(job.skills, job.title);
 
     return (
         <div className="mt-6 p-6 rounded-xl bg-zinc-950 border border-white/5 animate-fade-in-up">
@@ -56,11 +62,17 @@ function ATSPanel({ job, onClose }) {
                 <p className="text-xs font-bold text-blue-400 mb-2 flex items-center gap-2">
                     <Sparkles size={14} /> Recommended Action
                 </p>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                    {analysis.rawScore > 80
-                        ? "Your profile is a strong match. We recommend applying immediately and reaching out to the hiring manager via LinkedIn."
-                        : "Consider highlighting your 'McKinsey Forward' achievements to compensate for missing technical skills."}
-                </p>
+                <div className="text-xs text-zinc-400 leading-relaxed">
+                    {analysis.recommendations && analysis.recommendations.length > 0 ? (
+                        <ul className="list-disc pl-4 space-y-1">
+                            {analysis.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+                        </ul>
+                    ) : analysis.rawScore > 80 ? (
+                        <p>Your profile is a strong match. We recommend applying immediately and reaching out to the hiring manager via LinkedIn.</p>
+                    ) : (
+                        <p>Consider highlighting your 'McKinsey Forward' achievements to compensate for missing technical skills.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
@@ -178,11 +190,11 @@ function JobCard({ job, isSaved, onToggleSave, index }) {
                 {/* Match & Actions Section */}
                 <div className="flex items-center justify-between pt-5 border-t border-white/5">
                     <div className="flex items-center gap-4 py-2 px-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                        <MatchScoreCircle score={analysis.rawScore} size="sm" />
+                        <MatchScoreCircle score={job.atsScore || analysis.rawScore} size="sm" />
                         <div className="space-y-0.5">
-                            <div className="text-xs font-black text-white tracking-tight">{analysis.rawScore}% Match</div>
+                            <div className="text-xs font-black text-white tracking-tight">{job.atsScore || analysis.rawScore}% Match</div>
                             <div className="text-[10px] text-zinc-500 font-medium">
-                                {analysis.exactMatches.length}/{job.skills.length} skills matched
+                                {job.atsReport ? Object.keys(job.atsReport.matchedSkills || []).length : analysis.exactMatches.length}/{job.skills.length || 0} skills matched
                             </div>
                         </div>
                     </div>
@@ -224,33 +236,44 @@ export default function JobSearchTab({ savedJobs, setSavedJobs, showToast }) {
     const debouncedQ = useDebounce(q);
 
     React.useEffect(() => {
-        fetch('/api/jobs')
+        setLoading(true);
+        fetch('/api/jobs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userProfile: USER_PROFILE,
+                category: roleFilters.length === 1 ? roleFilters[0] : null
+            })
+        })
             .then(r => r.json())
-            .then(d => {
-                const mapped = (d.data || [])
-                    .filter(j => {
-                        const allKeywords = Object.values(ROLE_GROUPS).flatMap(g => g.keywords);
-                        const title = j.title.toLowerCase();
-                        return allKeywords.some(k => title.includes(k.toLowerCase())) && !BLOCKED_KEYWORDS.some(k => title.includes(k.toLowerCase()));
-                    })
-                    .slice(0, 15).map((j, i) => ({
-                        id: `api-${i}`, title: j.title, company: j.company_name, location: j.location || 'Remote',
-                        salary: j.remote ? 'Remote' : 'On-site', skills: (j.tags || []).slice(0, 5),
-                        isVerified: true, postedHoursAgo: Math.floor(Math.random() * 48), applyUrl: j.url,
-                        source: 'Arbeitnow', applicantCount: Math.floor(Math.random() * 100), isEasyApply: Math.random() > 0.5,
-                        description: j.description || ''
-                    }));
+            .then(data => {
+                const mapped = data.map(j => ({
+                    ...j,
+                    isVerified: j.tier === 'FAANG+' || j.tier === 'Unicorn',
+                    postedHoursAgo: j.postedAt ? Math.floor((new Date() - new Date(j.postedAt)) / 3600000) : 2,
+                    applyUrl: j.url,
+                    applicantCount: Math.floor(Math.random() * 50),
+                    isEasyApply: j.source !== 'Adzuna',
+                    // Note: atsScore and atsReport are provided by the backend ATS engine
+                }));
                 setApiJobs(mapped);
             })
-            .catch(() => { })
+            .catch(() => { showToast('Backend not connected or failed to load items.', 'error'); })
             .finally(() => setLoading(false));
-    }, []);
+    }, [roleFilters]);
 
-    const allJobs = [...MOCK_JOBS, ...apiJobs];
+    // We will now rely primarily on the backend data. 
+    // Fallback to MOCK_JOBS if backend is empty.
+    const allJobs = apiJobs.length > 0 ? apiJobs : MOCK_JOBS;
+
+    // Client-side filtering for text search
     const filtered = allJobs.filter(j => {
-        if (debouncedQ && !j.title.toLowerCase().includes(debouncedQ.toLowerCase()) && !j.skills.some(s => s.toLowerCase().includes(debouncedQ.toLowerCase()))) return false;
-        const roleGroup = detectRoleGroup(j.title).name;
-        if (roleFilters.length > 0 && !roleFilters.includes(roleGroup)) return false;
+        if (debouncedQ && !j.title.toLowerCase().includes(debouncedQ.toLowerCase()) && !j.company.toLowerCase().includes(debouncedQ.toLowerCase())) return false;
+        // Role filtering is somewhat handled by backend, but keep client side for mock data
+        if (roleFilters.length > 0 && apiJobs.length === 0) {
+            const roleGroup = detectRoleGroup(j.title).name;
+            if (!roleFilters.includes(roleGroup)) return false;
+        }
         return true;
     });
 
@@ -306,7 +329,7 @@ export default function JobSearchTab({ savedJobs, setSavedJobs, showToast }) {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
                 {loading ? [1, 2, 3, 4].map(i => <Card key={i} className="h-64 skeleton opacity-50" />) :
-                    filtered.map((job, index) => (
+                    filtered.map((job) => (
                         <JobCard
                             key={job.id}
                             job={job}

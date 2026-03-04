@@ -126,7 +126,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
 Input.displayName = "Input"
 
 // ===== SEPARATOR =====
-const Separator = React.forwardRef(({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
+const Separator = React.forwardRef(({ className, orientation = "horizontal", ...props }, ref) => (
     <div
         ref={ref}
         className={cn(

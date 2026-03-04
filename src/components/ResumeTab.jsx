@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Badge, MatchScoreCircle, Separator } from './ui';
 
-export default function ResumeTab({ savedNotes, setSavedNotes, showToast }) {
+export default function ResumeTab({ savedNotes, setSavedNotes }) {
     return (
         <div className="space-y-8 animate-fade-in">
             <Card className="bg-gradient-to-br from-zinc-900 to-black border-white/10 overflow-hidden relative">

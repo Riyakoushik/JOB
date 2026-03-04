@@ -86,7 +86,7 @@ export default function ApplicationsTab({ apps, setApps, showToast }) {
                         <p className="text-xs text-zinc-600 mt-1">Start by applying to some jobs in the Discover tab</p>
                     </Card>
                 ) : (
-                    apps.map((a, i) => (
+                    apps.map((a) => (
                         <Card key={a.id} className="group animate-fade-in-up hover:bg-zinc-900/50 transition-colors border-white/5">
                             <div className="flex items-center justify-between p-4">
                                 <div className="flex items-center gap-4">

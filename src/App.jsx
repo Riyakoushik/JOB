@@ -1,16 +1,17 @@
 import * as React from 'react';
 import {
-  Briefcase, Linkedin, Users, FileText, ClipboardList, User, Bell, Settings, Search, Rocket
+  Briefcase, Linkedin, Users, FileText, ClipboardList, User, Bell, Settings, Search, Rocket, Database
 } from 'lucide-react';
 import { Toast, Button, Avatar } from './components/ui';
 import { useLocalStorage } from './hooks/useHooks';
-import { MOCK_HRS, USER_PROFILE } from './data/constants';
+import { USER_PROFILE } from './data/constants';
 import JobSearchTab from './components/JobSearchTab';
 import LinkedInFinderTab from './components/LinkedInFinderTab';
 import HRContactsTab from './components/HRContactsTab';
 import ResumeTab from './components/ResumeTab';
 import ApplicationsTab from './components/ApplicationsTab';
 import MyProfileTab from './components/MyProfileTab';
+import AdminPanelTab from './components/AdminPanelTab';
 
 export default function JobHunterPro() {
   const [activeTab, setActiveTab] = React.useState('jobs');
@@ -19,7 +20,6 @@ export default function JobHunterPro() {
 
   const [savedJobs, setSavedJobs] = useLocalStorage('jh_saved_jobs', []);
   const [savedNotes, setSavedNotes] = useLocalStorage('jh_resume_notes', []);
-  const [hrContacts, setHrContacts] = useLocalStorage('jh_hr_contacts', MOCK_HRS);
   const [apps, setApps] = useLocalStorage('jh_applications', [
     { id: 'app1', title: 'APM Intern', company: 'Razorpay', date: '2026-02-28', status: 'Applied', match: 92 },
     { id: 'app2', title: 'Product Analyst', company: 'Freshworks', date: '2026-02-25', status: 'Interview Scheduled', match: 88 },
@@ -29,6 +29,7 @@ export default function JobHunterPro() {
     { id: 'jobs', label: 'Discover', icon: Briefcase },
     { id: 'linkedin', label: 'LinkedIn', icon: Linkedin },
     { id: 'hr', label: 'HR Finder', icon: Users },
+    { id: 'admin', label: 'Admin', icon: Database },
     { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'applications', label: 'Tracker', icon: ClipboardList },
     { id: 'profile', label: 'Profile', icon: User },
@@ -120,7 +121,8 @@ export default function JobHunterPro() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 md:pb-12">
           {activeTab === 'jobs' && <JobSearchTab savedJobs={savedJobs} setSavedJobs={setSavedJobs} showToast={showToast} />}
           {activeTab === 'linkedin' && <LinkedInFinderTab showToast={showToast} />}
-          {activeTab === 'hr' && <HRContactsTab hrContacts={hrContacts} setHrContacts={setHrContacts} showToast={showToast} />}
+          {activeTab === 'hr' && <HRContactsTab showToast={showToast} />}
+          {activeTab === 'admin' && <AdminPanelTab showToast={showToast} />}
           {activeTab === 'resume' && <ResumeTab savedNotes={savedNotes} setSavedNotes={setSavedNotes} showToast={showToast} />}
           {activeTab === 'applications' && <ApplicationsTab apps={apps} setApps={setApps} showToast={showToast} />}
           {activeTab === 'profile' && <MyProfileTab />}

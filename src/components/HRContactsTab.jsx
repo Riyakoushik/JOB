@@ -9,12 +9,15 @@ import {
 import { useDebounce } from '../hooks/useHooks';
 import { USER_PROFILE } from '../data/constants';
 
-export default function HRContactsTab({ hrContacts, setHrContacts, showToast }) {
+export default function HRContactsTab({ showToast }) {
+    const [hrContacts, setHrContacts] = React.useState([]);
     const [q, setQ] = React.useState('');
     const [showAdd, setShowAdd] = React.useState(false);
     const [form, setForm] = React.useState({
         name: '', company: '', designation: '', email: '', phone: '', linkedinUrl: '', roleHiring: ''
     });
+    const [scrapeCompany, setScrapeCompany] = React.useState('');
+    const [isScraping, setIsScraping] = React.useState(false);
     const debouncedQ = useDebounce(q);
 
     const filtered = hrContacts.filter(h => {
@@ -22,11 +25,41 @@ export default function HRContactsTab({ hrContacts, setHrContacts, showToast }) 
         return true;
     });
 
+    const fetchContacts = () => {
+        fetch('/api/hr')
+            .then(res => res.json())
+            .then(data => setHrContacts(data))
+            .catch(() => showToast('Failed to fetch HR contacts', 'error'));
+    };
+
+    React.useEffect(() => {
+        fetchContacts();
+    }, []);
+
     const saveHR = () => {
         if (!form.name || !form.company || !form.email) return;
         setHrContacts([{ ...form, id: `h-${Date.now()}`, isVerified: true, avatarColor: '#3b82f6' }, ...hrContacts]);
         setShowAdd(false); setForm({ name: '', company: '', designation: '', email: '', phone: '', linkedinUrl: '', roleHiring: '' });
         showToast('HR Contact Added!');
+    };
+
+    const runScraper = async () => {
+        if (!scrapeCompany) return;
+        setIsScraping(true);
+        try {
+            const res = await fetch('/api/hr/scrape', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ companyName: scrapeCompany })
+            });
+            const data = await res.json();
+            showToast(data.message || 'Scraping finished');
+            fetchContacts();
+        } catch (err) {
+            showToast('Scraping failed', 'error');
+        }
+        setIsScraping(false);
+        setScrapeCompany('');
     };
 
     const copy = (txt, lbl) => { navigator.clipboard.writeText(txt); showToast(`${lbl} copied`); };
@@ -54,9 +87,21 @@ export default function HRContactsTab({ hrContacts, setHrContacts, showToast }) 
                 <Card className="animate-fade-in-up bg-zinc-900/50 backdrop-blur-md">
                     <CardHeader>
                         <CardTitle className="text-white">New HR Contact</CardTitle>
-                        <CardDescription>Add a recruiter to your direct outreach list</CardDescription>
+                        <CardDescription>Add a recruiter manually or auto-scrape by company</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-6">
+                        <div className="flex gap-4 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                            <Input
+                                placeholder="Company Name to Scrape (e.g. Razorpay)"
+                                value={scrapeCompany}
+                                onChange={e => setScrapeCompany(e.target.value)}
+                                className="bg-black/50 border-blue-500/30"
+                            />
+                            <Button onClick={runScraper} disabled={isScraping} className="bg-blue-600 hover:bg-blue-500 font-bold w-40">
+                                {isScraping ? 'Scraping...' : 'Auto-Find HR'}
+                            </Button>
+                        </div>
+                        <Separator className="opacity-20" />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <Input placeholder="Full Name *" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
                             <Input placeholder="Company *" value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} />
@@ -73,7 +118,7 @@ export default function HRContactsTab({ hrContacts, setHrContacts, showToast }) 
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filtered.map((h, i) => (
+                {filtered.map((h) => (
                     <Card key={h.id} className="animate-fade-in-up hover:-translate-y-1 transition-all duration-300">
                         <CardHeader>
                             <div className="flex items-start gap-4">
