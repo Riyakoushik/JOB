@@ -5,4 +5,4 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "job-hunter-db"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "b6409864-af25-4f60-bd3f-ad7d36fb1553"
